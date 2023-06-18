@@ -29,7 +29,7 @@ jobs:
 
       - name: Copy .env file
         run: |
-          scp user@your-server:/var/www/batquiz/.env $GITHUB_WORKSPACE/.env
+          scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/.env $GITHUB_WORKSPACE/.env
 
       - name: Load environment variables
         run: |
