@@ -34,8 +34,8 @@ jobs:
 
       - name: Build and deploy changes
         run: |
-          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} 'cd /vaw/www/batquiz && git pull'
-          cd /vaw/www/batquiz
+          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} 'cd ${{ secrets.PATH }} && git pull'
+          ${{ secrets.PATH }}
           if [[ -z "${GITHUB_REF##*/v*}" ]]; then
             DOCKER_TAG="${GITHUB_REF##*/}"
           else
