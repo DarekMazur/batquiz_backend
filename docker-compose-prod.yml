@@ -6,7 +6,7 @@ services:
       dockerfile: ./Dockerfile.prod
     image: batquiz:latest
     restart: unless-stopped
-    env_file: .env
+    env_file: /var/www/batquiz/.env
     environment:
       DATABASE_CLIENT: ${DATABASE_CLIENT}
       DATABASE_HOST: ${DATABASE_HOST}
