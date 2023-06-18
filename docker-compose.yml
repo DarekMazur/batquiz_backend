@@ -33,5 +33,5 @@ services:
 
 networks:
   strapi:
-    name: BatNet
+    name: ${DATABASE_NETWORK}
     external: true
