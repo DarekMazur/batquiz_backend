@@ -1,0 +1,40 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH connection
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and deploy changes
+        run: |
+          ssh ${USER}@${MY_IP} 'cd /path/to/project && git pull'
+          cd /path/to/project
+          if [[ -z "${GITHUB_REF##*/v*}" ]]; then
+            DOCKER_TAG="${GITHUB_REF##*/}"
+          else
+            DOCKER_TAG="latest"
+          fi
+          docker-compose build --build-arg TAG=$DOCKER_TAG
+          docker-compose up -d
+          docker system prune -f --volumes --filter "until=24h"
