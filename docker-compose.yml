@@ -34,3 +34,26 @@ networks:
   strapi:
     name: BatNet
     external: true
+
+secrets:
+    DATABASE_CLIENT:
+      external: true
+    DATABASE_HOST:
+      external: true
+    DATABASE_NAME:
+      external: true
+    DATABASE_USERNAME:
+      external: true
+    DATABASE_PORT:
+      external: true
+    JWT_SECRET:
+      external: true
+    ADMIN_JWT_SECRET:
+      external: true
+    DATABASE_PASSWORD:
+      external: true
+    NODE_ENV:
+      external: true
+    DOCKERFILE:
+      external: true
+
