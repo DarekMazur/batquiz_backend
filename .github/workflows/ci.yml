@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Clear known hosts cache
         run: |
-          ssh-keygen -R ${{ secrets.MY_IP }}
+          ssh-keyscan -H ${{ secrets.MY_IP }} >> ~/.ssh/known_hosts
 
       - name: Set up SSH connection
         uses: webfactory/ssh-agent@v0.5.1
