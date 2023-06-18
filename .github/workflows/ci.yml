@@ -27,6 +27,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Copy .env file
+        run: |
+          scp user@your-server:/var/www/batquiz/.env $GITHUB_WORKSPACE/.env
+
       - name: Load environment variables
         run: |
           echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> $GITHUB_ENV
