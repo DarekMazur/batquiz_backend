@@ -34,14 +34,12 @@ jobs:
 
       - name: Build and deploy changes
         run: |
-          target_path="${{ secrets.PATH }}"
-          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} "cd $target_path && git pull"
-          cd $target_path
+          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} "cd ${{ secrets.PATH }} && git pull"
           if [[ -z "${GITHUB_REF##*/v*}" ]]; then
             DOCKER_TAG="${GITHUB_REF##*/}"
           else
             DOCKER_TAG="latest"
           fi
-          docker-compose build --build-arg TAG=$DOCKER_TAG
-          docker-compose up -d
+          docker-compose -f ${{ secrets.PATH }}/docker-compose.yml build --build-arg TAG=$DOCKER_TAG
+          docker-compose -f ${{ secrets.PATH }}/docker-compose.yml up -d
           docker system prune -f --volumes --filter "until=24h"
