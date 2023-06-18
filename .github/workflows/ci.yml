@@ -28,8 +28,8 @@ jobs:
 
       - name: Build and deploy changes
         run: |
-          ssh ${USER}@${MY_IP} 'cd /path/to/project && git pull'
-          cd /path/to/project
+          ssh ${USER}@${MY_IP} 'cd /vaw/www/batquiz && git pull'
+          cd /vaw/www/batquiz
           if [[ -z "${GITHUB_REF##*/v*}" ]]; then
             DOCKER_TAG="${GITHUB_REF##*/}"
           else
