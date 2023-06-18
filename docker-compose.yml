@@ -2,8 +2,7 @@ version: '3.9'
 services:
   batquiz:
     container_name: batquiz
-    build:
-      dockerfile: Dockerfile
+    build: .
     image: batquiz:latest
     restart: unless-stopped
     env_file: .env
