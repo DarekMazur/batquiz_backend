@@ -43,6 +43,6 @@ jobs:
       - name: Build and deploy changes
         run: |
           ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} "cd ${{ secrets.PATH }} && git pull"
-          docker-compose -f docker-compose-prod.yml build --build-arg
+          docker-compose -f docker-compose-prod.yml build --pull
           docker-compose up -d
           docker system prune -f --volumes --filter "until=24h"
