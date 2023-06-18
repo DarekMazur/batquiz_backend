@@ -18,13 +18,13 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       NODE_ENV: ${NODE_ENV}
     volumes:
-      - ./config:/opt/app/config
-      - ./src:/opt/app/src
-      - ./package.json:/opt/package.json
-      - ./package-lock.json:/opt/package-lock.json
+      - /var/www/batquiz/config:/opt/app/config
+      - /var/www/batquiz/src:/opt/app/src
+      - /var/www/batquiz/package.json:/opt/package.json
+      - /var/www/batquiz/package-lock.json:/opt/package-lock.json
 
-      - ./.env:/opt/app/.env
-      - ./public/uploads:/opt/app/public/uploads
+      - /var/www/batquiz/.env:/opt/app/.env
+      - /var/www/batquiz/public/uploads:/opt/app/public/uploads
     ports:
       - '1337:1337'
     networks:
