@@ -34,8 +34,9 @@ jobs:
 
       - name: Build and deploy changes
         run: |
-          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} 'cd ${{ secrets.PATH }} && git pull'
-          ${{ secrets.PATH }}
+          target_path="${{ secrets.PATH }}"
+          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} "cd $target_path && git pull"
+          cd $target_path
           if [[ -z "${GITHUB_REF##*/v*}" ]]; then
             DOCKER_TAG="${GITHUB_REF##*/}"
           else
