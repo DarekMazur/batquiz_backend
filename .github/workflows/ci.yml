@@ -38,6 +38,7 @@ jobs:
           echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> $GITHUB_ENV
           echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> $GITHUB_ENV
+          echo "DOCKERFILE=${{ secrets.DOCKERFILE }}" >> $GITHUB_ENV
 
       - name: Build and deploy changes
         run: |
