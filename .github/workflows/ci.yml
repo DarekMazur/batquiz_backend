@@ -31,6 +31,11 @@ jobs:
         run: |
           scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/.env $GITHUB_WORKSPACE/.env
 
+      - name: Copy files from server
+        run: |
+          scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/package.json $GITHUB_WORKSPACE/package.json
+          scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/package-lock.json $GITHUB_WORKSPACE/package-lock.json
+
       - name: Load environment variables
         run: |
           echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> $GITHUB_ENV
