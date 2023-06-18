@@ -1,62 +1,35 @@
-name: Deploy to VPS
+name: Deploy to Server
 
 on:
   push:
     branches:
       - main
   pull_request:
-    types:
-      - closed
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clear known hosts cache
-        run: |
-          mkdir -p ~/.ssh
-          touch ~/.ssh/known_hosts
-          ssh-keyscan -H ${{ secrets.MY_IP }} >> ~/.ssh/known_hosts
-
-      - name: Set up SSH connection
-        uses: webfactory/ssh-agent@v0.5.1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Copy .env file
-        run: |
-          scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/.env $GITHUB_WORKSPACE/.env
+      - name: SSH into Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MY_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy files from server
+      - name: Update Repository on Server
         run: |
-          scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/package.json $GITHUB_WORKSPACE/package.json
-          scp ${{ secrets.USER }}@${{ secrets.MY_IP }}:/var/www/batquiz/package-lock.json $GITHUB_WORKSPACE/package-lock.json
+          cd ${{ secrets.PATH }}
+          git pull
 
-      - name: Load environment variables
+      - name: Deploy Docker Compose
         run: |
-          echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> $GITHUB_ENV
-          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> $GITHUB_ENV
-          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
-          echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> $GITHUB_ENV
-          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> $GITHUB_ENV
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
-          echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> $GITHUB_ENV
-          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> $GITHUB_ENV
-
-      - name: Build and deploy changes
-        run: |
-          ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} "cd ${{ secrets.PATH }} && git pull"
-          if [[ -z "${GITHUB_REF##*/v*}" ]]; then
-            DOCKER_TAG="${GITHUB_REF##*/}"
-          else
-            DOCKER_TAG="latest"
-          fi
-          export $(grep -v '^#' /var/www/batquiz/.env | xargs -d '\n')
-          docker-compose -f docker-compose-prod.yml build --build-arg TAG=$DOCKER_TAG
-          docker-compose -f docker-compose-prod.yml up -d
+          cd ${{ secrets.PATH }}
+          docker-compose up -d --force-recreate --build
           docker system prune -f --volumes --filter "until=24h"
