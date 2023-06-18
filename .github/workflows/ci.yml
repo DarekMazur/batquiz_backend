@@ -48,6 +48,6 @@ jobs:
           else
             DOCKER_TAG="latest"
           fi
-          docker-compose build --build-arg TAG=$DOCKER_TAG
+          docker-compose -f docker-compose-prod.yml build --build-arg TAG=$DOCKER_TAG
           docker-compose up -d
           docker system prune -f --volumes --filter "until=24h"

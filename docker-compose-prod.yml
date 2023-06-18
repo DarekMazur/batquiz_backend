@@ -3,7 +3,7 @@ services:
   batquiz:
     container_name: batquiz
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     image: batquiz:latest
     restart: unless-stopped
     env_file: .env
