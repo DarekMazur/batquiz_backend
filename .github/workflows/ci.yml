@@ -43,11 +43,6 @@ jobs:
       - name: Build and deploy changes
         run: |
           ssh ${{ secrets.USER }}@${{ secrets.MY_IP }} "cd ${{ secrets.PATH }} && git pull"
-          if [[ -z "${GITHUB_REF##*/v*}" ]]; then
-            DOCKER_TAG="${GITHUB_REF##*/}"
-          else
-            DOCKER_TAG="latest"
-          fi
-          docker-compose -f docker-compose-prod.yml build --build-arg TAG=$DOCKER_TAG
+          docker-compose -f docker-compose-prod.yml build --build-arg
           docker-compose up -d
           docker system prune -f --volumes --filter "until=24h"
