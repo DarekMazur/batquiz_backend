@@ -13,23 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: SSH into Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.MY_IP }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Update Repository on Server
-        run: |
-          cd ${{ secrets.PATH }}
+    - name: multiple SSH command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secretsPORT }}
+        script: |
+          cd /var/www/batquiz
           git pull
-
-      - name: Deploy Docker Compose
-        run: |
-          cd ${{ secrets.PATH }}
           docker-compose up -d --force-recreate --build
           docker system prune -f --volumes --filter "until=24h"
