@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        - DOCKERFILE=${DOCKERFILE}
+        - DOCKERFILE=${{secrets.DOCKERFILE}}
     image: batquiz:latest
     restart: unless-stopped
     env_file: .env
