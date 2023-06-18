@@ -27,17 +27,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Load environment variables
+      - name: Generate .env file
         run: |
-          echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> $GITHUB_ENV
-          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> $GITHUB_ENV
-          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
-          echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> $GITHUB_ENV
-          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> $GITHUB_ENV
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
-          echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> $GITHUB_ENV
-          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> $GITHUB_ENV
+          echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> /var/www/batquiz/.env
+          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> /var/www/batquiz/.env
+          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> /var/www/batquiz/.env
+          echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> /var/www/batquiz/.env
+          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> /var/www/batquiz/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /var/www/batquiz/.env
+          echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> /var/www/batquiz/.env
+          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> /var/www/batquiz/.env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> /var/www/batquiz/.env
 
       - name: Build and deploy changes
         run: |
